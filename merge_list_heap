@@ -1,0 +1,31 @@
+import heapq
+import timeit
+def merge_lists(arr):
+    heapq.heapify(arr)  # Convert the given list into a min-heap in-place
+    total_cost = 0
+    sequence = []
+    while len(arr) > 1:
+        # Extract the two smallest elements from the heap
+        smallest1 = heapq.heappop(arr)
+        smallest2 = heapq.heappop(arr)
+        # Merge the two lists and calculate the cost
+        merged_size = smallest1 + smallest2
+        total_cost += merged_size
+        # Add the merged list size back to the heap
+        heapq.heappush(arr, merged_size)
+        # Store the sequence of merges
+        sequence.append((smallest1, smallest2))
+    return sequence, total_cost
+# Vary the input list size and measure the execution time
+input_sizes = [10,20,30,40,50]
+for size in input_sizes:
+    input_list = [x for x in range(size)]
+    # Measure the execution time using timeit
+    execution_time = timeit.timeit(lambda: merge_lists(input_list.copy()), number=1) * 1e9
+    # Calculate merge sequence and total cost
+    sequence, total_cost = merge_lists(input_list.copy())
+    print(f"Input Size: {size}")
+    print("Merge Sequence:", sequence)
+    print("Total Cost:", total_cost)
+    print("Execution Time (ns):", execution_time)
+    print("---")
